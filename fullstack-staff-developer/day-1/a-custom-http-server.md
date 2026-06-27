@@ -146,3 +146,60 @@ TCP হ্যান্ডশেক (TCP Handshake), যা মূলত Three-Wa
 
 কাজ শেষ হয়ে গেলে কানেকশনটি বন্ধ করার জন্য কিন্তু আবার আরেকটি প্রক্রিয়া চালানো হয়, যাকে বলা হয় Four-Way Handshake। সেখানে FIN (Finish) এবং ACK ফ্ল্যাগ ব্যবহার করে ৪টি ধাপে সম্মতির মাধ্যমে কানেকশনটি নিরাপদে বন্ধ করা হয়। [34, 35, 36, 37, 38]
 আপনি কি জানতে চান কীভাবে হ্যাকাররা এই হ্যান্ডশেক প্রক্রিয়াকে অপব্যবহার করে সার্ভার ক্র্যাশ করে (যেমন: SYN Flood DDoS Attack), নাকি নোড ডট জেএস দিয়ে একটি TCP ক্লায়েন্ট ও সার্ভার বানিয়ে এই থ্রি-ওয়ে হ্যান্ডশেক প্র্যাক্টিক্যালি দেখতে চান?
+
+## # Communicate with server using telnet
+
+To communicate with your Node.js server using Telnet, you need to establish a raw TCP connection to the server's IP address and port, and then manually type out the raw HTTP request protocol format. [1, 2, 3]
+Here is exactly how to do it step by step.
+
+## 1. Ensure Your Node.js Server is Running
+
+Make sure you have your basic Node.js server running on port 3000. If you are using the code from the first step, start it in your terminal: [4]
+
+node server.js
+
+## 2. Connect Using Telnet
+
+Open a new, separate terminal window and run the telnet command followed by the host (localhost or 127.0.0.1) and the port number (3000). [5, 6, 7, 8, 9]
+
+telnet localhost 3000
+
+Note: If your system says telnet: command not found, you may need to install it first (e.g., brew install telnet on macOS, or enable it via "Turn Windows features on or off" on Windows). [10, 11, 12]
+If successful, your terminal will clear or display a message like this, indicating the TCP Three-Way Handshake is complete: [13, 14]
+
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+
+## 3. Manually Type the HTTP Request
+
+Because you are communicating over a raw TCP connection, you cannot just press enter. You must explicitly type out a valid, raw HTTP network request. [15, 16, 17]
+Type the following lines into the Telnet terminal exactly as shown, and press Enter twice at the end (the double Enter signals the end of the HTTP request header section): [18, 19]
+
+GET / HTTP/1.1
+Host: localhost
+
+## 4. Observe the Server Response
+
+Immediately after pressing Enter twice, the Node.js server will process your raw text stream, map it through its conditional routing, and stream back the raw HTTP response headers along with the data payload before closing the TCP connection: [20]
+
+HTTP/1.1 200 OK
+Content-Type: text/plain
+Date: Sat, 27 Jun 2026 12:05:00 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+Welcome to the homepage!
+Connection closed by foreign host.
+
+## Testing Other Routes
+
+You can repeat the process to test your other API paths. For example, to hit your JSON metrics endpoint, connect via Telnet again and send:
+
+GET /api/data HTTP/1.1
+Host: localhost
+
+If you would like to advance this project, let me know if you want to:
+
+create an http server and communicate with that server using telnet.
